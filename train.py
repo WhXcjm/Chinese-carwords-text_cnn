@@ -15,7 +15,7 @@ def train(train_iter, dev_iter, model, args):
     for epoch in range(1, args.epochs + 1):
         for batch in train_iter:
             feature, target = batch.text, batch.label
-            feature.data.t_(), target.data.sub_(1)
+            feature.t_(), target.sub_(1)
             if args.cuda:
                 feature, target = feature.cuda(), target.cuda()
             optimizer.zero_grad()
@@ -52,7 +52,7 @@ def eval(data_iter, model, args):
     corrects, avg_loss = 0, 0
     for batch in data_iter:
         feature, target = batch.text, batch.label
-        feature.data.t_(), target.data.sub_(1)
+        feature.t_(), target.sub_(1)
         if args.cuda:
             feature, target = feature.cuda(), target.cuda()
         logits = model(feature)

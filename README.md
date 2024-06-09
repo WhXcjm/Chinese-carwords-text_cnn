@@ -1,4 +1,6 @@
 ## TextCNN Pytorch实现 中文文本分类
+注：cuda加速版
+
 ## 论文
 [Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882)
 
@@ -8,10 +10,11 @@
 * https://github.com/Shawn1993/cnn-text-classification-pytorch
 
 ## 依赖项
-* python3.5
-* pytorch==1.0.0
-* torchtext==0.3.1
-* jieba==0.39
+* python3.7.12
+* pytorch==1.7.1
+* pytorch-cuda==12.1
+* torchtext==0.8.1
+* jieba==0.42.1
 
 ## 词向量
 https://github.com/Embedding/Chinese-Word-Vectors<br>

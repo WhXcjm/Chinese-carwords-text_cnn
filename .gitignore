@@ -104,4 +104,4 @@ trees
 .idea
 
 #word2vec
-sgns.zhihu.word  
+sgns.*
