@@ -4,13 +4,14 @@ import torch
 import torch.nn.functional as F
 
 
-def train(train_iter, dev_iter, model, args):
+def train(train_iter, dev_iter, model, args, result):
     if args.cuda:
         model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     steps = 0
     best_acc = 0
     last_step = 0
+    best_model_path = None
     model.train()
     for epoch in range(1, args.epochs + 1):
         for batch in train_iter:
@@ -39,12 +40,15 @@ def train(train_iter, dev_iter, model, args):
                     best_acc = dev_acc
                     last_step = steps
                     if args.save_best:
+                        best_model_path = save(model, args.save_dir, 'best', steps)
+                        result['best_model_path'] = best_model_path
+                        
                         print('Saving best model, acc: {:.4f}%\n'.format(best_acc))
-                        save(model, args.save_dir, 'best', steps)
                 else:
                     if steps - last_step >= args.early_stopping:
                         print('\nearly stop by {} steps, acc: {:.4f}%'.format(args.early_stopping, best_acc))
                         raise KeyboardInterrupt
+    return best_model_path  # 返回最佳模型路径
 
 
 def eval(data_iter, model, args):
@@ -76,3 +80,4 @@ def save(model, save_dir, save_prefix, steps):
     save_prefix = os.path.join(save_dir, save_prefix)
     save_path = '{}_steps_{}.pt'.format(save_prefix, steps)
     torch.save(model.state_dict(), save_path)
+    return save_path

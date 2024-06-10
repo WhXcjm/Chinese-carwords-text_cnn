@@ -1,1 +1,1 @@
-python main.py -static=true -non-static=true -multichannel=true -device 0 -pretrained-name sgns.zhihu.bigram
+python main.py -static=true -non-static=true -multichannel=true -device 0 -pretrained-name sgns.zhihu.bigram -filter-num 150 -filter-sizes 2,3,4,5,6 -early-stopping 1000

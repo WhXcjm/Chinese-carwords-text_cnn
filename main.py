@@ -2,6 +2,8 @@ import argparse
 import torch
 import torchtext.data as data
 from torchtext.vocab import Vectors
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 import model
 import train
@@ -94,7 +96,33 @@ if args.snapshot:
 if args.cuda:
     torch.cuda.set_device(args.device)
     text_cnn = text_cnn.cuda()
+result={}
+best_model_path=None
 try:
-    train.train(train_iter, dev_iter, text_cnn, args)
+    best_model_path=train.train(train_iter, dev_iter, text_cnn, args, result)
 except KeyboardInterrupt:
     print('Exiting from training early')
+
+
+# Save all for predict
+
+import pickle, os, shutil   
+
+# 在保存模型之前保存args
+args.vectors = None
+args_path = os.path.join('saved', 'args.pkl')
+os.makedirs(os.path.dirname(args_path), exist_ok=True)
+with open(args_path, 'wb') as f:
+    pickle.dump(args, f)
+
+# 保存最佳模型
+if(best_model_path==None):
+    best_model_path=result['best_model_path']
+
+if best_model_path and os.path.exists(best_model_path):
+    shutil.copy(best_model_path, os.path.join('saved', 'best_model.pt'))
+
+# 保存vocab
+vocab_path = os.path.join('saved', 'text_field_vocab.pkl')
+with open(vocab_path, 'wb') as f:
+    pickle.dump(text_field.vocab, f)

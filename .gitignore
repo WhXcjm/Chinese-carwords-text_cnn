@@ -103,5 +103,12 @@ trees
 # pycharm
 .idea
 
-#word2vec
+# word2vec
 sgns.*
+
+# backup
+*.bak
+
+# content cache
+*.pkl
+schedule.md
